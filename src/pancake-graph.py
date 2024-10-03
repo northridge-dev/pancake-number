@@ -8,12 +8,12 @@ def get_next_state(pancakes):
         yield flip(pancakes, flip_point)
 
 def find_min_flips(stack_size):
-    stack = goal = tuple(range(1, stack_size + 1))
-    mins = []
+    goal = tuple(range(1, stack_size + 1))
+    pancake_num = 0
     cache_hit = 0
     cache_miss = 0
     visited = set()
-    queue = [(pancakes, 0)]
+    queue = [(goal, 0)]
 
     while queue:
         current_stack, flips = queue.pop(0)
@@ -22,15 +22,16 @@ def find_min_flips(stack_size):
             if next_state not in visited:
                 cache_miss += 1
                 visited.add(next_state)
-                mins.append(flips + 1)
+                if pancake_num < flips + 1:
+                    pancake_num = flips + 1
                 queue.append((next_state, flips + 1))
             cache_hit += 1
+    print(f"cache hits: {cache_hit}")
+    print(f"cache miss: {cache_miss}")
 
+    return pancake_num 
 
 
 n = int(input('Stack size? '))
-find_min_flips(stack)
 
-print(f"pancake number: {max(mins)}")
-print(f"cache hits: {cache_hit}")
-print(f"cache miss: {cache_miss}")
+print(f"pancake number: {find_min_flips(n)}")
